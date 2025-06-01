@@ -4,13 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+     <link rel="favicon" href="logoo.ico" type="image/x-icon">
+     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
+
+    <div class="ads-nav-buttons">
+    <a href="newlogin.html" class="btn btn-secondary">
+        <i class="fas fa-sign-in-alt"></i> Post Ads?
+    </a>&nbsp;&nbsp;&nbsp;
+    <a href="index.html" class="btn btn-primary">
+        <i class="fas fa-home"></i> Home
+    </a>
+</div>
     <!-- index.html: Add this where you want ads to appear -->
 <section class="ads-section container">
   <h2>Sponsored Ads</h2>
   <div id="ads-list" style="display: flex; gap: 2rem; flex-wrap: wrap;"></div>
 </section>
+
 <script>
 async function loadAds() {
   const res = await fetch('/api/ads');

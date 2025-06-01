@@ -109,6 +109,7 @@
             transition: all 0.3s ease;
             text-align: center;
         }
+        
 
         .btn-primary {
             background: linear-gradient(135deg, #f7b731 0%, #f39c12 100%);
@@ -147,7 +148,7 @@
 
         /* Hero Section */
         .hero {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #f7b731 0%, #764ba2 100%);
             color: white;
             padding: 120px 0 80px;
             text-align: center;
@@ -623,10 +624,277 @@
         }
 
         /* Responsive Design */
-        @media (max-width: 768px) {
+     
+            
+    .nav-links {
+        display: none;
+        position: absolute;
+        top: 70px;
+        left: 0;
+        width: 100vw;
+        background: white;
+        flex-direction: column;
+        gap: 0;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+        z-index: 999;
+        transition: max-height 0.3s ease;
+        overflow: hidden;
+    }
+    .nav-links.open {
+        display: flex;
+    }
+    .nav-links li {
+        width: 100%;
+        text-align: center;
+        border-bottom: 1px solid #eee;
+        padding: 1rem 0;
+    }
+    .auth-buttons {
+        flex-direction: column;
+        gap: 0.5rem;
+        margin-top: 1rem;
+        width: 90%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .btn {
+        width: 100%;
+        border-radius: 10px;
+        font-size: 1rem;
+        padding: 0.6rem 0;
+        margin-bottom: 0.3rem;
+        box-shadow: 0 2px 8px rgba(247,183,49,0.08);
+    }
+    .btn:last-child {
+        margin-bottom: 0;
+    }
+    .mobile-menu {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-end;
+        cursor: pointer;
+        z-index: 1001;
+        margin-left: 1rem;
+    }
+    .mobile-menu span {
+        width: 28px;
+        height: 4px;
+        background: #333;
+        margin: 4px 0;
+        border-radius: 2px;
+        transition: all 0.3s;
+    }
+    /* Logo bigger and more visible on all screens */
+.logo img {
+    width: 150px !important;
+    height: 120px !important;
+    object-fit: contain;
+    margin-right: 10px;
+}
+.logo {
+    font-size: 2.3rem;
+    gap: 14px;
+}
+.logo i {
+    font-size: 2.7rem;
+}
+
+/* Smaller, more compact login/signup buttons */
+.auth-buttons {
+    gap: 0.5rem;
+}
+.btn {
+    padding: 0.45rem 1.1rem;
+    border-radius: 18px;
+    font-size: 0.98rem;
+    min-width: 90px;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+    .logo img {
+        width: 110px !important;
+        height: 90px !important;
+    }
+    .logo {
+        font-size: 1.5rem;
+        gap: 8px;
+    }
+    .logo i {
+        font-size: 2rem;
+    }
+    .auth-buttons {
+        flex-direction: column;
+        gap: 0.4rem;
+        margin-top: 1rem;
+        width: 90%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .btn {
+        width: 100%;
+        border-radius: 10px;
+        font-size: 0.95rem;
+        padding: 0.5rem 0;
+        margin-bottom: 0.2rem;
+    }
+    .btn:last-child {
+        margin-bottom: 0;
+    }
+      .nav-links {
+        display: none;
+        /* ...other styles... */
+    }
+    .nav-links.open {
+        display: flex;
+    }
+
+}
+
+/* Desktop: Make auth buttons very small */
+.auth-buttons {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    position: absolute;
+    right: 2rem;
+    top: 1.2rem;
+}
+.btn {
+    padding: 0.25rem 0.7rem;
+    border-radius: 14px;
+    font-size: 0.85rem;
+    min-width: 40px;
+    box-shadow: none;
+    transition: background 0.2s, color 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.btn i {
+    font-size: 1rem;
+    margin-right: 0.3em;
+}
+.btn span {
+    display: inline;
+}
+
+/* General button base */
+.btn {
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+    transition: all 0.3s ease;
+    /* Remove background and color here to let .btn-primary/.btn-secondary control them */
+    background: none;
+    color: inherit;
+}
+
+/* Primary button */
+.btn-primary {
+    background: linear-gradient(135deg, #f7b731 0%, #f39c12 100%);
+    color: #fff !important;
+    box-shadow: 0 4px 15px rgba(247, 183, 49, 0.3);
+}
+
+/* Secondary button */
+.btn-secondary {
+    background: #333;
+    color: #fff !important;
+}
+
+/* Large button */
+.btn-large {
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    border-radius: 25px;
+}
+
+/* Default button size */
+.btn:not(.btn-large) {
+    padding: 0.45rem 1.1rem;
+    border-radius: 18px;
+    font-size: 0.98rem;
+    min-width: 90px;
+}
+
+/* Mobile: Make sure background and color are not overridden */
+@media (max-width: 768px) {
+    .btn {
+        width: 100%;
+        min-width: 0;
+        font-size: 1rem;
+        padding: 0.6rem 0;
+        margin-bottom: 0.3rem;
+        border-radius: 10px;
+        background: none;
+        color: inherit;
+    }
+    .btn-primary {
+        background: linear-gradient(135deg, #f7b731 0%, #f39c12 100%);
+        color: #fff !important;
+    }
+    .btn-secondary {
+        background: #333;
+        color: #fff !important;
+    }
+}
+
+/* Mobile: Icon-only, even smaller */
+@media (max-width: 768px) {
+    .auth-buttons {
+        position: static;
+        width: 90%;
+        margin: 1rem auto 0 auto;
+        flex-direction: row;
+        justify-content: center;
+        gap: 0.7rem;
+    }
+    
+    }
+    .btn span {
+        display: none !important;
+    }
+    .btn i {
+        margin-right: 0;
+        font-size: 1.1rem;
+    }
+
+    .logo img {
+        width: 80px !important;
+        height: 70px !important;
+    }
+    .logo {
+        font-size: 1.3rem;
+        gap: 6px;
+    }
+    .logo i {
+        font-size: 1.7rem;
+    }
+
+
+/* Make logo bigger and more visible on all screens */
+.logo img {
+    width: 120px;
+    height: 100px;
+    object-fit: contain;
+    margin-right: 8px;
+}
+.logo {
+    font-size: 2rem;
+    gap: 12px;
+}
+.logo i {
+    font-size: 2.2rem;
+}
             .nav-links {
                 display: none;
             }
+            
 
             .mobile-menu {
                 display: flex;
@@ -653,7 +921,8 @@
             .programs-grid {
                 grid-template-columns: 1fr;
             }
-        }
+            
+        
 
         @media (max-width: 480px) {
             .container {
@@ -706,6 +975,139 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+        /* Desktop only: Small auth buttons at top right with text */
+@media (min-width: 769px) {
+  @media (min-width: 769px) {
+   .auth-buttons {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+        position: absolute;
+        right: 5.5rem;   /* <-- Increased from 2rem/2.5rem to 5.5rem */
+        top: 1.5rem;
+        z-index: 1100;
+        width: auto;
+        margin: 0;
+        flex-direction: row;
+        justify-content: flex-end;
+    }
+    .btn {
+        width: auto !important;
+        min-width: 60px;
+        padding: 0.25rem 0.9rem;
+        border-radius: 14px;
+        font-size: 0.92rem;
+        box-shadow: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .btn span {
+        display: inline !important;
+    }
+}
+}
+.ads-cta-section {
+    padding: 4rem 0 3rem 0;
+    background: linear-gradient(135deg, #f7b731 0%, #764ba2 100%);
+    position: relative;
+    overflow: hidden;
+}
+.ads-cta-container {
+    max-width: 700px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+}
+.ads-cta-content {
+    background: rgba(255,255,255,0.97);
+    border-radius: 30px;
+    box-shadow: 0 8px 32px rgba(118,75,162,0.13), 0 2px 8px #f7b73133;
+    padding: 2.5rem 2rem 2.5rem 2rem;
+    text-align: center;
+    position: relative;
+    z-index: 2;
+    animation: fadeInUp 1s cubic-bezier(.23,1.01,.32,1) both;
+}
+.ads-cta-icon {
+    font-size: 3.5rem;
+    color: #f7b731;
+    margin-bottom: 1rem;
+    animation: tada 1.2s;
+}
+.ads-cta-content h2 {
+    font-size: 2.2rem;
+    color: #764ba2;
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+.ads-cta-content p {
+    color: #333;
+    font-size: 1.15rem;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+}
+.ads-highlight {
+    color: #f7b731;
+    font-weight: 600;
+}
+.ads-cta-btn {
+    font-size: 1.1rem;
+    padding: 0.9rem 2.2rem;
+    border-radius: 30px;
+    box-shadow: 0 4px 15px rgba(247, 183, 49, 0.18);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7em;
+    transition: background 0.2s, transform 0.2s;
+}
+.ads-cta-btn:hover {
+    background: linear-gradient(135deg, #764ba2 0%, #f7b731 100%);
+    color: #fff !important;
+    transform: translateY(-3px) scale(1.04);
+}
+.ads-cta-bg {
+    position: absolute;
+    top: -60px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, #f7b73133 0%, #764ba233 100%);
+    z-index: 1;
+    border-radius: 50%;
+    filter: blur(10px);
+    pointer-events: none;
+}
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(40px);}
+    to { opacity: 1; transform: translateY(0);}
+}
+@keyframes tada {
+    0% { transform: scale(1);}
+    10%, 20% { transform: scale(0.9) rotate(-3deg);}
+    30%, 50%, 70%, 90% { transform: scale(1.1) rotate(3deg);}
+    40%, 60%, 80% { transform: scale(1.1) rotate(-3deg);}
+    100% { transform: scale(1);}
+}
+@media (max-width: 600px) {
+    .ads-cta-content {
+        padding: 1.5rem 0.7rem;
+    }
+    .ads-cta-content h2 {
+        font-size: 1.3rem;
+    }
+    .ads-cta-btn {
+        font-size: 1rem;
+        padding: 0.7rem 1.2rem;
+    }
+    .ads-cta-bg {
+        width: 220px;
+        height: 220px;
+        top: -30px;
+    }
+}
+
     </style>
 </head>
 <body>
@@ -719,7 +1121,7 @@
         <nav class="container">
             <a href="#" class="logo" onclick="showPage('home')">
                 <i class="fas fa-graduation-cap"></i>
-                <img src="logoo.png" alt="tekmac logo" width="100px" height="90px">
+                <img src="logoo.png" alt="tekmac logo">
             </a>
             <ul class="nav-links">
                 <li><a href="#" onclick="showPage('home')">Home</a></li>
@@ -729,10 +1131,16 @@
                 <li><a href="#benefits">Benefits</a></li>
                 <li><a href="mentor.html">mentorship</a></li>                
             </ul>
-            <div class="auth-buttons">
-                <a href="login.html" class="btn btn-secondary">Sign In</a>
-                <a href="login.html" class="btn btn-primary">Register</a>
-            </div>
+          <div class="auth-buttons">
+    <a href="newlogin.html" class="btn btn-secondary">
+        <i class="fas fa-sign-in-alt"></i>
+        <span>Sign In</span>
+    </a>
+    <a href="login.html" class="btn btn-primary">
+        <i class="fas fa-user-plus"></i>
+        <span>Register</span>
+    </a>
+</div>
             <div class="mobile-menu">
                 <span></span>
                 <span></span>
@@ -757,8 +1165,8 @@
                     </div>
                     
                     <div class="hero-buttons">
-                        <a href="#" class="btn btn-primary btn-large" onclick="showPage('categories')">Get Started</a>
-                        <a href="#" class="btn btn-secondary btn-large">Explore Courses</a>
+                        <a href="login.html" class="btn btn-primary btn-large" onclick="showPage('categories')">Get Started</a>
+                        <a href="login.html" class="btn btn-secondary btn-large">Explore Courses</a>
                     </div>
                 </div>
             </div>
@@ -831,6 +1239,25 @@
             </div>
         </section>
 
+        <section class="ads-cta-section">
+    <div class="ads-cta-container">
+        <div class="ads-cta-content">
+            <div class="ads-cta-icon">
+                <i class="fas fa-bullhorn"></i>
+            </div>
+            <h2>Promote & Discover Opportunities!</h2>
+            <p>
+                Looking to reach more tech enthusiasts or find the latest offers? <br>
+                Visit our <b>Ads Hub</b> to <span class="ads-highlight">explore</span> trending ads or <span class="ads-highlight">post your own</span> in seconds.
+            </p>
+            <a href="ads.html" class="btn btn-primary btn-large ads-cta-btn">
+                <i class="fas fa-arrow-right"></i> Go to Ads Hub
+            </a>
+        </div>
+        <div class="ads-cta-bg"></div>
+    </div>
+</section>
+
         <!-- Programs Section -->
         <section class="programs">
             <div class="container">
@@ -846,7 +1273,7 @@
                                 <li>Industry mentorship</li>
                                 <li>Career guidance</li>
                             </ul>
-                            <a href="#" class="btn btn-primary">Learn More</a>
+                            <a href="login.html" class="btn btn-primary">Learn More</a>
                         </div>
                     </div>
                     <div class="program-card">
@@ -859,7 +1286,7 @@
                                 <li>Networking opportunities</li>
                                 <li>Job placement assistance</li>
                             </ul>
-                            <a href="#" class="btn btn-primary">Apply Now</a>
+                            <a href="login.html" class="btn btn-primary">Apply Now</a>
                         </div>
                     </div>
                       <div class="program-card practicals-card">
@@ -947,31 +1374,31 @@
                         <div class="feature-icon"><i class="fab fa-js-square"></i></div>
                         <h3 class="feature-title">JavaScript Fundamentals</h3>
                         <p class="feature-description">Master the basics of JavaScript programming and web development.</p>
-                        <a href="#" class="btn btn-primary">Start Course</a>
+                        <a href="login.html" class="btn btn-primary">Start Course</a>
                     </div>
                     <div class="feature-card">
                         <div class="feature-icon"><i class="fab fa-react"></i></div>
                         <h3 class="feature-title">React Development</h3>
                         <p class="feature-description">Build modern web applications with React and its ecosystem.</p>
-                        <a href="#" class="btn btn-primary">Start Course</a>
+                        <a href="login.html" class="btn btn-primary">Start Course</a>
                     </div>
                     <div class="feature-card">
                         <div class="feature-icon"><i class="fab fa-node-js"></i></div>
                         <h3 class="feature-title">Node.js Backend</h3>
                         <p class="feature-description">Create powerful server-side applications with Node.js and Express.</p>
-                        <a href="#" class="btn btn-primary">Start Course</a>
+                        <a href="login.html" class="btn btn-primary">Start Course</a>
                     </div>
                     <div class="feature-card">
                         <div class="feature-icon"><i class="fas fa-database"></i></div>
                         <h3 class="feature-title">Database Design</h3>
                         <p class="feature-description">Learn SQL, NoSQL, and database optimization techniques.</p>
-                        <a href="#" class="btn btn-primary">Start Course</a>
+                        <a href="login.html" class="btn btn-primary">Start Course</a>
                     </div>
                     <div class="feature-card">
                         <div class="feature-icon"><i class="fab fa-aws"></i></div>
                         <h3 class="feature-title">Cloud Computing</h3>
                         <p class="feature-description">Deploy and manage applications on AWS, Azure, and Google Cloud.</p>
-                        <a href="#" class="btn btn-primary">Start Course</a>
+                        <a href="login.html" class="btn btn-primary">Start Course</a>
                     </div>
                     <div class="feature-card">
                         <div class="feature-icon"><i class="fas fa-mobile-alt"></i></div>
@@ -1173,6 +1600,37 @@
                 hero.style.transform = `translateY(${scrolled * 0.5}px)`;
             }
         });
+        
+ // Hamburger menu toggle
+document.querySelector('.mobile-menu').addEventListener('click', function() {
+    const navLinks = document.querySelector('.nav-links');
+    this.classList.toggle('active');
+    navLinks.classList.toggle('open');
+    // Show nav if opening, hide if closing
+    navLinks.style.display = navLinks.classList.contains('open') ? 'flex' : 'none';
+});
+
+// Navigation for hamburger menu and normal menu
+document.querySelectorAll('.nav-links a').forEach(link => {
+    link.addEventListener('click', function(e) {
+        // If the link uses showPage, handle SPA navigation
+        const onclick = this.getAttribute('onclick');
+        if (onclick && onclick.includes('showPage')) {
+            e.preventDefault();
+            // Extract the page id from the onclick attribute
+            const match = onclick.match(/showPage\('([^']+)'\)/);
+            if (match) {
+                showPage(match[1]);
+            }
+        }
+        // Hide the nav menu and reset hamburger icon
+        const navLinks = document.querySelector('.nav-links');
+        navLinks.classList.remove('open');
+        navLinks.style.display = 'none';
+        document.querySelector('.mobile-menu').classList.remove('active');
+    });
+});
+
     </script>
 </body>
 </html>

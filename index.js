@@ -131,6 +131,51 @@ await db.execute(`
   await insertSampleMentors();
 }
 
+
+
+app.post('/login', async (req, res) => {
+  const { email, password } = req.body;
+  if (!email || !password) {
+    return res.status(400).json({ success: false, error: 'Email and password are required' });
+  }
+
+  try {
+    // Check if user exists
+    const [users] = await db.execute('SELECT * FROM users WHERE email = ?', [email]);
+    if (users.length === 0) {
+      return res.status(401).json({ success: false, error: 'User not found' });
+    }
+
+    const user = users[0];
+
+    // Compare password
+    const match = await bcrypt.compare(password, user.password);
+    if (!match) {
+      return res.status(401).json({ success: false, error: 'Incorrect password' });
+    }
+
+    // Generate a token (optional, but recommended)
+    const token = jwt.sign(
+      { id: user.id, username: user.username, email: user.email },
+      process.env.JWT_SECRET || 'your_jwt_secret',
+      { expiresIn: '2h' }
+    );
+
+    // Respond with user info and token
+    res.json({
+      success: true,
+      user: {
+        id: user.id,
+        username: user.username,
+        email: user.email
+      },
+      token
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, error: 'Server error: ' + error.message });
+  }
+});
+
 // For file uploads
 import multer from 'multer';
 const upload = multer({ dest: path.join(__dirname, 'public', 'ads') });
@@ -156,6 +201,17 @@ app.get('/api/ads',upload.single('image'), async (req, res) => {
   res.json(ads);
 });
 
+app.post('/api/nkwa-collect', async (req, res) => {
+    const { phone, amount } = req.body;
+    // Call your Nkwa API here (replace with actual integration)
+    try {
+        // Example: await nkwa.collect(phone, amount);
+        // Simulate success:
+        res.json({ success: true, message: "Payment initiated. Please confirm on your phone." });
+    } catch (error) {
+        res.json({ success: false, error: "Failed to initiate payment." });
+    }
+});
 
 async function insertSampleMentors() {
   const mentors = [
@@ -377,12 +433,39 @@ app.post('/collect-payment', async (req, res) => {
         error: 'Amount and phoneNumber are required',
       });
     }
+
+    // 1. Initiate payment with Nkwa API
     const data = { amount, phoneNumber };
     const response = await axios.post(`${baseURL}/collect`, data, { headers });
-    if (response.data && response.data.payment) {
-      res.json({ success: true, data: response.data.payment });
+
+    if (response.data && response.data.payment && response.data.payment.id) {
+      const paymentId = response.data.payment.id;
+
+      // 2. Poll for payment confirmation (every 3s up to 30s)
+      let confirmed = false;
+      let paymentStatus = null;
+      for (let i = 0; i < 10; i++) {
+        await new Promise(r => setTimeout(r, 3000));
+        const statusRes = await axios.get(`${baseURL}/payments/${paymentId}`, { headers });
+        paymentStatus = statusRes.data?.payment?.status;
+        if (paymentStatus === 'confirmed' || paymentStatus === 'success' || paymentStatus === 'completed') {
+          confirmed = true;
+          break;
+        }
+      }
+
+      if (confirmed) {
+        return res.json({ success: true, paymentConfirmed: true, paymentId });
+      } else {
+        return res.json({
+          success: true,
+          paymentConfirmed: false,
+          paymentId,
+          error: "Payment not confirmed yet. Please try again."
+        });
+      }
     } else {
-      res.status(500).json({
+      return res.status(500).json({
         success: false,
         error: 'Unexpected response from payment gateway.',
         details: response.data,

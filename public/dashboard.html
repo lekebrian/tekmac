@@ -305,6 +305,11 @@
             <i class="fas fa-chart-bar"></i>
             <span><a href="statistics.html">Statistics</a></span>
         </div>
+
+         <div class="menu-item" data-tab="statistics">
+            <i class="fas fa-house"></i>
+            <span><a href="index.html">Go to Home</a></span>
+        </div>
        
         <div style="margin-top: auto;">
           
@@ -493,6 +498,7 @@
     <input type="text" name="business_name" placeholder="Business Name" required style="padding: 10px; border-radius: 6px; border: 1px solid #ddd;">
     <input type="text" name="location" placeholder="Location" required style="padding: 10px; border-radius: 6px; border: 1px solid #ddd;">
     <textarea name="description" placeholder="Description" required style="padding: 10px; border-radius: 6px; border: 1px solid #ddd; min-height: 80px;"></textarea>
+    <input type="tel" name="phone" id="phone" placeholder="Phone Number" required style="padding: 10px; border-radius: 6px; border: 1px solid #ddd;">
     <input type="hidden" name="user_id" id="user_id" required>
     <button type="submit" class="btnn" style="width: 100%; font-weight: 600; font-size: 1.1em;">Proceed to Pay & Post</button>
     <div id="adsResponse" style="text-align: center; margin-top: 8px; color: #22c55e; font-weight: 500;"></div>
@@ -513,11 +519,14 @@
         gettem();
     });
 
-    // Ads form submission
+  
+    // ...existing code for gettem() and DOMContentLoaded...
+
     document.getElementById('adsForm').addEventListener('submit', async function(e) {
         e.preventDefault();
         const formData = new FormData(this);
-        // Set amount based on schedule
+
+        // Get schedule and amount
         const schedule = formData.get('schedule');
         let amount = 0;
         if (schedule === 'daily') amount = 200;
@@ -525,16 +534,45 @@
         if (schedule === 'monthly') amount = 3500;
         formData.set('amount', amount);
 
-        // Optionally, call your payment API here before posting the ad
+        // Get phone number
+        const phone = formData.get('phone');
+        if (!phone) {
+            document.getElementById('adsResponse').textContent = "Phone number is required.";
+            return;
+        }
 
-        const res = await fetch('/api/ads', {
+        // 1. Initiate payment via Nkwa API
+        const paymentRes = await fetch('/api/nkwa-collect', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ phone, amount })
+        });
+        const paymentData = await paymentRes.json();
+
+        if (!paymentData.success) {
+            document.getElementById('adsResponse').textContent = paymentData.error || "Payment initiation failed.";
+            return;
+        }
+
+        // 2. Ask user to confirm payment (simple confirm dialog)
+        const confirmed = confirm("Please confirm the payment on your phone. Click OK after you have paid.");
+        if (!confirmed) {
+            document.getElementById('adsResponse').textContent = "Payment not confirmed.";
+            return;
+        }
+
+        // 3. Post the ad only after payment confirmation
+        const adRes = await fetch('/api/ads', {
             method: 'POST',
             body: formData
         });
-
-        const data = await res.json();
-        document.getElementById('adsResponse').textContent = data.success ? '✅ Ad posted!' : data.error;
+        const adData = await adRes.json();
+        document.getElementById('adsResponse').textContent = adData.success ? '✅ Ad posted!' : adData.error;
+        if (adData.success) {
+            window.location.href = 'ads.html';
+        }
     });
+    
 
     // Tab switching functionality
     document.querySelectorAll('.menu-item').forEach(item => {

@@ -9,7 +9,7 @@
     body {
       margin: 0;
       font-family: 'Poppins', sans-serif;
-      background: linear-gradient(to right, #3498db, #8e44ad);
+     background: linear-gradient(135deg, #f7b731 0%, #764ba2 100%);
       display: flex;
       justify-content: center;
       align-items: center;
@@ -86,7 +86,7 @@
 <body>
 
   <h1>
-    Awaiting Payment Mode
+    Complete Payment to sing in as Intern
   </h1>
 
   <div class="container">
@@ -97,7 +97,7 @@
       <form id="collectForm">
         <input type="tel" id="collectPhone" placeholder="Phone Number" required>
         <input type="number" id="collectAmount" placeholder="Amount (FCFA)" min="100" required>
-        <button type="submit" onclick="pay()">Collect Now</button>
+        <button type="submit">Checkout</button>
         <div id="collectResponse" class="response-message"></div>
       </form>
       <div id="payment-status">Please complete your payment to access the dashboard.</div>
@@ -120,27 +120,61 @@
   </div>
 
   <script>
-    function pay(){
-        window.location.href = "/dashboard.html";
-    }
+  
     // Collect Payment Logic
-    document.getElementById('collectForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const phoneNumber = document.getElementById('collectPhone').value;
-      const amount = parseInt(document.getElementById('collectAmount').value, 10);
-     
-      const res = await fetch('/collect-payment', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ phoneNumber, amount})
-      });
+document.getElementById('collectForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const phoneNumber = document.getElementById('collectPhone').value;
+  const amount = parseInt(document.getElementById('collectAmount').value, 10);
+  const msg = document.getElementById('collectResponse');
+  msg.textContent = "Processing payment, please wait...";
+  msg.className = 'response-message';
 
-      const data = await res.json();
-      const msg = document.getElementById('collectResponse');
-      msg.textContent = data.success ? '✅ Collection successful' :  `${data.error}`;
-      msg.className = 'response-message ' + (data.success ? 'success' : 'error');
+  try {
+    const res = await fetch('/collect-payment', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ phoneNumber, amount })
     });
 
+    const data = await res.json();
+
+    if (data.success && data.paymentConfirmed) {
+      msg.textContent = '✅ Payment received! Redirecting to dashboard...';
+      msg.className = 'response-message success';
+      setTimeout(() => {
+        window.location.href = "/dashboard.html";
+      }, 3000);
+    } else if (data.success && !data.paymentConfirmed) {
+      msg.textContent = 'Payment initiated but not yet confirmed. Please confirm on your phone and try again.';
+      msg.className = 'response-message';
+    } else {
+      msg.textContent = data.error || "Payment failed. Please try again.";
+      msg.className = 'response-message error';
+    }
+  } catch (err) {
+    msg.textContent = "Network or server error. Please try again.";
+    msg.className = 'response-message error';
+  }
+});
+
+// After initial payment attempt, if not confirmed:
+if (data.success && !data.paymentConfirmed) {
+  msg.innerHTML = 'Payment initiated but not yet confirmed. <button id="checkStatusBtn">Check Payment Status</button>';
+  document.getElementById('checkStatusBtn').onclick = async function() {
+    msg.textContent = "Checking payment status...";
+    const statusRes = await fetch(`/payment/${data.paymentId}`);
+    const statusData = await statusRes.json();
+    if (statusData.success && (statusData.data.status === 'confirmed' || statusData.data.status === 'success' || statusData.data.status === 'completed')) {
+      msg.textContent = '✅ Payment received! Redirecting to dashboard...';
+      setTimeout(() => {
+        window.location.href = "/dashboard.html";
+      }, 30000);
+    } else {
+      msg.textContent = "Still not confirmed. Please try again in a moment.";
+    }
+  }
+}
     // Disburse Payment Logic
     // document.getElementById('disburseForm').addEventListener('submit', async (e) => {
     //   e.preventDefault();
