@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechMax - Empowering Innovation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff6b35, #f7931e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #ff6b35;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background: linear-gradient(45deg, #ff6b35, #f7931e);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Main Content */
+        main {
+            margin-top: 80px;
+            padding: 2rem 0;
+        }
+
+        .section {
+            margin: 4rem 0;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease;
+        }
+
+        .section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .section-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+            padding: 3rem 0;
+        }
+
+        .text-content {
+            padding: 2rem;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(45deg, #333, #666);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            width: 50px;
+            height: 4px;
+            background: linear-gradient(45deg, #ff6b35, #f7931e);
+            bottom: -10px;
+            left: 0;
+            border-radius: 2px;
+        }
+
+        .section-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #555;
+            margin-bottom: 1.5rem;
+        }
+
+        .image-placeholder {
+            height: 300px;
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 50%, #ffaa44 100%);
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.3);
+        }
+
+        .image-placeholder:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(255, 107, 53, 0.4);
+        }
+
+        .image-placeholder::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .image-placeholder:hover::before {
+            left: 100%;
+        }
+
+        .image-placeholder::after {
+            content: '✨';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3rem;
+            opacity: 0.7;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(-50%, -50%) translateY(0px); }
+            50% { transform: translate(-50%, -50%) translateY(-10px); }
+        }
+
+        /* Alternating layout */
+        .section:nth-child(even) .section-content {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .section:nth-child(even) .text-content {
+            order: 2;
+        }
+
+        .section:nth-child(even) .image-placeholder {
+            order: 1;
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(135deg, #333 0%, #555 100%);
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 4rem;
+            position: relative;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #ff6b35, transparent);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .section-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .section:nth-child(even) .text-content,
+            .section:nth-child(even) .image-placeholder {
+                order: unset;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .text-content {
+                padding: 1rem;
+            }
+        }
+
+        /* Scroll indicator */
+        .scroll-indicator {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 4px;
+            background: linear-gradient(45deg, #ff6b35, #f7931e);
+            z-index: 1001;
+            transition: width 0.1s ease;
+        }
+
+        /* Particle background */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 107, 53, 0.3);
+            border-radius: 50%;
+            animation: particle-float 6s infinite linear;
+        }
+
+        @keyframes particle-float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="scroll-indicator"></div>
+    <div class="particles"></div>
+
+    <header>
+        <nav class="container">
+            <div class="logo">TechMax</div>
+            <ul class="nav-links">
+                <li><a href="#about">About</a></li>
+                <li><a href="#who-we-are">Who We Are</a></li>
+                <li><a href="#mission">Mission</a></li>
+                <li><a href="#offer">What We Offer</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container">
+        <section id="about" class="section">
+            <div class="section-content">
+                <div class="text-content">
+                    <h2 class="section-title">About Us</h2>
+                    <p class="section-text">
+                        Empowering the Next Generation of Tech Innovators. At TechMax, we believe that everyone deserves the opportunity to thrive in the digital age. Our mission is to provide cutting-edge technology solutions and educational resources that empower individuals and businesses to reach their full potential in an increasingly connected world.
+                    </p>
+                    <p class="section-text">
+                        With over a decade of experience in the tech industry, we've helped thousands of clients transform their ideas into reality through innovative software solutions and comprehensive training programs.
+                    </p>
+                </div>
+                <div class="image-placeholder"></div>
+            </div>
+        </section>
+
+        <section id="who-we-are" class="section">
+            <div class="section-content">
+                <div class="text-content">
+                    <h2 class="section-title">Who We Are</h2>
+                    <p class="section-text">
+                        Founded in 2015, TechMax is a powerhouse team of tech professionals, designers, and educators who are passionate about making technology accessible to everyone. Our diverse team brings together expertise from various fields including software development, UX/UI design, data science, and digital marketing.
+                    </p>
+                    <p class="section-text">
+                        We believe that innovation thrives when diverse minds collaborate, and we're committed to fostering an inclusive environment where creativity and technical excellence go hand in hand.
+                    </p>
+                </div>
+                <div class="image-placeholder"></div>
+            </div>
+        </section>
+
+        <section id="mission" class="section">
+            <div class="section-content">
+                <div class="text-content">
+                    <h2 class="section-title">Our Mission</h2>
+                    <p class="section-text">
+                        To bridge the gap between complex technology and everyday users by creating intuitive, powerful solutions that drive real business results. We're committed to democratizing access to cutting-edge technology through education, innovation, and exceptional service.
+                    </p>
+                    <p class="section-text">
+                        Our goal is to empower every client with the tools and knowledge they need to succeed in the digital landscape, whether they're a startup looking to disrupt an industry or an established company seeking to modernize their operations.
+                    </p>
+                </div>
+                <div class="image-placeholder"></div>
+            </div>
+        </section>
+
+        <section id="offer" class="section">
+            <div class="section-content">
+                <div class="text-content">
+                    <h2 class="section-title">What We Offer</h2>
+                    <p class="section-text">
+                        <strong>1. Interactive Training Solutions:</strong> Our programs are designed to be hands-on and engaging, ensuring that learners not only understand the concepts but can apply them in real-world scenarios.
+                    </p>
+                    <p class="section-text">
+                        <strong>2. Technology Development:</strong> From web applications to mobile apps and enterprise software, we build scalable solutions that grow with your business needs.
+                    </p>
+                    <p class="section-text">
+                        <strong>3. Digital Transformation:</strong> We help organizations navigate the complexities of digital transformation with strategic planning, implementation, and ongoing support.
+                    </p>
+                </div>
+                <div class="image-placeholder"></div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; TechMax All Rights Reserved</p>
+        </div>
+    </footer>
+
+    <script>
+        // Scroll indicator
+        function updateScrollIndicator() {
+            const scrollTop = window.pageYOffset;
+            const docHeight = document.body.offsetHeight - window.innerHeight;
+            const scrollPercent = (scrollTop / docHeight) * 100;
+            document.querySelector('.scroll-indicator').style.width = scrollPercent + '%';
+        }
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all sections
+        document.querySelectorAll('.section').forEach(section => {
+            observer.observe(section);
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Header background on scroll
+        function updateHeader() {
+            const header = document.querySelector('header');
+            if (window.scrollY > 100) {
+                header.style.background = 'rgba(255, 255, 255, 0.98)';
+                header.style.boxShadow = '0 2px 30px rgba(0, 0, 0, 0.15)';
+            } else {
+                header.style.background = 'rgba(255, 255, 255, 0.95)';
+                header.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.1)';
+            }
+        }
+
+        // Create floating particles
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 6 + 's';
+            particle.style.animationDuration = (Math.random() * 3 + 6) + 's';
+            document.querySelector('.particles').appendChild(particle);
+
+            // Remove particle after animation
+            setTimeout(() => {
+                particle.remove();
+            }, 9000);
+        }
+
+        // Image placeholder click effects
+        document.querySelectorAll('.image-placeholder').forEach(placeholder => {
+            placeholder.addEventListener('click', function() {
+                // Create ripple effect
+                const ripple = document.createElement('div');
+                ripple.style.position = 'absolute';
+                ripple.style.borderRadius = '50%';
+                ripple.style.background = 'rgba(255, 255, 255, 0.6)';
+                ripple.style.transform = 'scale(0)';
+                ripple.style.animation = 'ripple 0.6s linear';
+                ripple.style.left = '50%';
+                ripple.style.top = '50%';
+                ripple.style.width = '20px';
+                ripple.style.height = '20px';
+                ripple.style.marginLeft = '-10px';
+                ripple.style.marginTop = '-10px';
+                
+                this.appendChild(ripple);
+                
+                setTimeout(() => {
+                    ripple.remove();
+                }, 600);
+            });
+        });
+
+        // Add ripple animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes ripple {
+                to {
+                    transform: scale(4);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Event listeners
+        window.addEventListener('scroll', () => {
+            updateScrollIndicator();
+            updateHeader();
+        });
+
+        // Create particles periodically
+        setInterval(createParticle, 300);
+
+        // Logo click animation
+        document.querySelector('.logo').addEventListener('click', function() {
+            this.style.animation = 'none';
+            setTimeout(() => {
+                this.style.animation = 'pulse 0.6s ease';
+            }, 10);
+        });
+
+        // Add pulse animation
+        const pulseStyle = document.createElement('style');
+        pulseStyle.textContent = `
+            @keyframes pulse {
+                0% { transform: scale(1); }
+                50% { transform: scale(1.1); }
+                100% { transform: scale(1); }
+            }
+        `;
+        document.head.appendChild(pulseStyle);
+
+        // Initialize
+        updateScrollIndicator();
+        updateHeader();
+    </script>
+</body>
+</html>

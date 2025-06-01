@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Payment Mode</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to right, #3498db, #8e44ad);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 2rem;
+      color: #fff;
+      flex-direction: column;
+    }
+
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      justify-content: center;
+    }
+
+    .payment-card {
+      background: #ffffff;
+      color: #333;
+      padding: 2rem;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 20px 30px rgba(0,0,0,0.2);
+    }
+
+    h2 {
+      text-align: center;
+      color: #0083b0;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #0083b0;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #005f78;
+    }
+
+    .response-message {
+      margin-top: 1rem;
+      text-align: center;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .success {
+      color: green;
+    }
+
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>
+    Awaiting Payment Mode
+  </h1>
+
+  <div class="container">
+
+    <!-- Collect Payment Section -->
+    <div class="payment-card">
+      <h2>Proceed to Payment</h2>
+      <form id="collectForm">
+        <input type="tel" id="collectPhone" placeholder="Phone Number" required>
+        <input type="number" id="collectAmount" placeholder="Amount (FCFA)" min="100" required>
+        <button type="submit" onclick="pay()">Collect Now</button>
+        <div id="collectResponse" class="response-message"></div>
+      </form>
+      <div id="payment-status">Please complete your payment to access the dashboard.</div>
+
+    </div>
+
+    <!-- Disburse Payment Section -->
+   <!-- <div class="payment-card">
+      <h2>Disburse Payment</h2>
+      <form id="disburseForm">
+        <input type="tel" id="disbursePhone" placeholder="Phone Number" required>
+        <input type="number" id="disburseAmount" placeholder="Amount (FCFA)" min="100" required>
+        <button type="submit">Disburse Now</button>
+        <div id="disburseResponse" class="response-message"></div>
+      </form>
+    </div>
+-->
+    
+
+  </div>
+
+  <script>
+    function pay(){
+        window.location.href = "/dashboard.html";
+    }
+    // Collect Payment Logic
+    document.getElementById('collectForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const phoneNumber = document.getElementById('collectPhone').value;
+      const amount = parseInt(document.getElementById('collectAmount').value, 10);
+     
+      const res = await fetch('/collect-payment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phoneNumber, amount})
+      });
+
+      const data = await res.json();
+      const msg = document.getElementById('collectResponse');
+      msg.textContent = data.success ? '✅ Collection successful' :  `${data.error}`;
+      msg.className = 'response-message ' + (data.success ? 'success' : 'error');
+    });
+
+    // Disburse Payment Logic
+    // document.getElementById('disburseForm').addEventListener('submit', async (e) => {
+    //   e.preventDefault();
+    //   const phoneNumber = document.getElementById('disbursePhone').value;
+    //   const amount = parseInt(document.getElementById('disburseAmount').value, 10);
+
+    //   const res = await fetch('/disburse-payment', {
+    //     method: 'POST',
+    //     headers: { 'Content-Type': 'application/json' },
+    //     body: JSON.stringify({ phoneNumber, amount })
+    //   });
+
+    //   const data = await res.json();
+    //   const msg = document.getElementById('disburseResponse');
+    //   msg.textContent = data.success ? '✅ Disbursement successful' :  `${data.error}`;
+    //   msg.className = 'response-message ' + (data.success ? 'success' : 'error');
+    // });
+  </script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- index.html: Add this where you want ads to appear -->
+<section class="ads-section container">
+  <h2>Sponsored Ads</h2>
+  <div id="ads-list" style="display: flex; gap: 2rem; flex-wrap: wrap;"></div>
+</section>
+<script>
+async function loadAds() {
+  const res = await fetch('/api/ads');
+  const ads = await res.json();
+  const adsList = document.getElementById('ads-list');
+  adsList.innerHTML = '';
+  ads.forEach(ad => {
+    adsList.innerHTML += `
+      <div class="ad-card" style="background:#fff; border-radius:10px; box-shadow:0 2px 8px #ccc; padding:1rem; width:250px;">
+        <img src="${ad.image_url}" alt="Ad" style="width:100%; border-radius:8px;">
+        <h4>${ad.business_name}</h4>
+        <p><b>Location:</b> ${ad.location}</p>
+        <p>${ad.description}</p>
+        <span style="color:#f7b731;">${ad.schedule.toUpperCase()} Ad</span>
+      </div>
+    `;
+  });
+}
+window.addEventListener('DOMContentLoaded', loadAds);
+</script>
+</body>
+</html>

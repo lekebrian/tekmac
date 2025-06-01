@@ -1,0 +1,1267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TekMac - Find Your Path in Tech</title>
+    <style>
+        * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+}
+
+.section {
+  display: none;
+}
+
+.section.active {
+  display: block;
+}
+
+/* Auth Section */
+.auth-container {
+  max-width: 500px;
+  margin: 50px auto;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.auth-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 40px 30px;
+  text-align: center;
+}
+
+.auth-header h1 {
+  font-size: 2.5em;
+  margin-bottom: 10px;
+}
+
+.auth-tabs {
+  display: flex;
+  background: #f8f9fa;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 15px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.3s;
+}
+
+.tab-btn.active {
+  background: white;
+  color: #667eea;
+  font-weight: bold;
+}
+
+.auth-form {
+  display: none;
+  padding: 30px;
+}
+
+.auth-form.active {
+  display: block;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #333;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #e1e5e9;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: border-color 0.3s;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.skills-grid label {
+  display: flex;
+  align-items: center;
+  font-weight: normal;
+  margin-bottom: 0;
+}
+
+.skills-grid input[type="checkbox"] {
+  width: auto;
+  margin-right: 8px;
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  padding: 8px 16px;
+  background: transparent;
+  color: white;
+  border: 2px solid white;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.btn-secondary:hover {
+  background: white;
+  color: #667eea;
+}
+
+/* Dashboard */
+.navbar {
+  background: white;
+  padding: 15px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.nav-brand {
+  font-size: 24px;
+  font-weight: bold;
+  color: #667eea;
+}
+
+.nav-user {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.dashboard-container {
+  display: flex;
+  height: calc(100vh - 70px);
+}
+
+.dashboard-sidebar {
+  width: 250px;
+  background: white;
+  padding: 20px 0;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.nav-btn {
+  width: 100%;
+  padding: 15px 30px;
+  border: none;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.3s;
+}
+
+.nav-btn:hover,
+.nav-btn.active {
+  background: #667eea;
+  color: white;
+}
+
+.dashboard-content {
+  flex: 1;
+  padding: 30px;
+  overflow-y: auto;
+}
+
+.content-panel {
+  display: none;
+}
+
+.content-panel.active {
+  display: block;
+}
+
+/* Mentors */
+.mentors-filter {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.mentors-filter input {
+  flex: 1;
+  padding: 12px;
+  border: 2px solid #e1e5e9;
+  border-radius: 8px;
+}
+
+.mentors-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.mentor-card {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s;
+}
+
+.mentor-card:hover {
+  transform: translateY(-5px);
+}
+
+.mentor-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.mentor-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  margin-right: 15px;
+}
+
+.mentor-info h3 {
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.mentor-level {
+  color: #666;
+  font-size: 14px;
+}
+
+.mentor-bio {
+  margin-bottom: 15px;
+  color: #555;
+  line-height: 1.5;
+}
+
+.mentor-skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 15px;
+}
+
+.skill-tag {
+  background: #e3f2fd;
+  color: #1976d2;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+}
+
+.connect-btn {
+  width: 100%;
+  padding: 10px;
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.connect-btn:hover {
+  background: #5a6fd8;
+}
+
+/* Chat */
+.chat-container {
+  display: flex;
+  height: 600px;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.chat-sidebar {
+  width: 300px;
+  border-right: 1px solid #e1e5e9;
+  padding: 20px;
+}
+
+.chat-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+#chat-header {
+  padding: 20px;
+  border-bottom: 1px solid #e1e5e9;
+  background: #f8f9fa;
+  font-weight: bold;
+}
+
+.chat-messages {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+  background: #f8f9fa;
+}
+
+.message {
+  margin-bottom: 15px;
+  display: flex;
+}
+
+.message.user-message {
+  justify-content: flex-end;
+}
+
+.message-content {
+  max-width: 70%;
+  padding: 12px 16px;
+  border-radius: 18px;
+  line-height: 1.4;
+}
+
+.user-message .message-content {
+  background: #667eea;
+  color: white;
+}
+
+.bot-message .message-content,
+.other-message .message-content {
+  background: white;
+  color: #333;
+  border: 1px solid #e1e5e9;
+}
+
+.chat-input {
+  display: flex;
+  padding: 20px;
+  border-top: 1px solid #e1e5e9;
+  background: white;
+}
+
+.chat-input input {
+  flex: 1;
+  padding: 12px;
+  border: 2px solid #e1e5e9;
+  border-radius: 25px;
+  margin-right: 10px;
+}
+
+.chat-input button {
+  padding: 12px 20px;
+  border-radius: 25px;
+}
+
+/* Chatbot */
+.chatbot-container {
+  background: white;
+  border-radius: 12px;
+  height: 600px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.chatbot-container .chat-messages {
+  flex: 1;
+}
+
+.conversation-item {
+  padding: 15px;
+  border-bottom: 1px solid #e1e5e9;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.conversation-item:hover {
+  background: #f8f9fa;
+}
+
+.conversation-item.active {
+  background: #e3f2fd;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .dashboard-container {
+    flex-direction: column;
+  }
+
+  .dashboard-sidebar {
+    width: 100%;
+    height: auto;
+    display: flex;
+    overflow-x: auto;
+  }
+
+  .nav-btn {
+    white-space: nowrap;
+    padding: 15px 20px;
+  }
+
+  .mentors-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .chat-container {
+    height: 500px;
+  }
+
+  .chat-sidebar {
+    display: none;
+  }
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.mentor-card,
+.message {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Loading states */
+.loading {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #667eea;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+    </style>
+</head>
+<body>
+    <div id="app">
+        <!-- Login/Register Section -->
+        <div id="auth-section" class="section active">
+            <div class="auth-container">
+                <div class="auth-header">
+                    <h1>TekMac</h1>
+                    <p>Connect with experienced mentors and accelerate your tech career</p>
+                </div>
+                
+                <div class="auth-tabs">
+                    <button class="tab-btn active" onclick="showLogin()">Login</button>
+                    <button class="tab-btn" onclick="showRegister()">Register</button>
+                </div>
+                
+                <!-- Login Form -->
+                <form id="login-form" class="auth-form active">
+                    <h2>Welcome Back</h2>
+                    <div class="form-group">
+                        <input type="email" id="login-email" placeholder="Email" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" id="login-password" placeholder="Password" required>
+                    </div>
+                    <button type="submit" class="btn-primary">Login</button>
+                </form>
+                
+                <!-- Register Form -->
+                <form id="register-form" class="auth-form">
+                    <h2>Join TekMac</h2>
+                    <div class="form-group">
+                        <input type="text" id="register-username" placeholder="Username" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" id="register-email" placeholder="Email" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" id="register-password" placeholder="Password" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Experience Level:</label>
+                        <select id="experience-level" required>
+                            <option value="">Select Level</option>
+                            <option value="Beginner">Beginner</option>
+                            <option value="Intermediate">Intermediate</option>
+                            <option value="Advanced">Advanced</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Tech Skills (select all that apply):</label>
+                        <div class="skills-grid">
+                            <label><input type="checkbox" value="JavaScript"> JavaScript</label>
+                            <label><input type="checkbox" value="Python"> Python</label>
+                            <label><input type="checkbox" value="React"> React</label>
+                            <label><input type="checkbox" value="Node.js"> Node.js</label>
+                            <label><input type="checkbox" value="Django"> Django</label>
+                            <label><input type="checkbox" value="Machine Learning"> Machine Learning</label>
+                            <label><input type="checkbox" value="React Native"> React Native</label>
+                            <label><input type="checkbox" value="Flutter"> Flutter</label>
+                            <label><input type="checkbox" value="iOS"> iOS</label>
+                            <label><input type="checkbox" value="Android"> Android</label>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-primary">Register</button>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Dashboard Section -->
+        <div id="dashboard-section" class="section">
+            <nav class="navbar">
+                <div class="nav-brand">TekMac</div>
+                <div class="nav-user">
+                    <span id="user-welcome"></span>
+                    <button onclick="logout()" class="btn-secondary">Logout</button>
+                </div>
+            </nav>
+            
+            <div class="dashboard-container">
+                <div class="dashboard-sidebar">
+                    <button class="nav-btn active" onclick="showMentors()">Find Mentors</button>
+                    <button class="nav-btn" onclick="showMessages()">Messages</button>
+                    <button class="nav-btn" onclick="showChatbot()">AI Assistant</button>
+                </div>
+                
+                <div class="dashboard-content">
+                    <!-- Mentors Section -->
+                    <div id="mentors-content" class="content-panel active">
+                        <h2>Recommended Mentors</h2>
+                        <div class="mentors-filter">
+                            <input type="text" id="skills-filter" placeholder="Filter by skills (e.g., JavaScript, Python)">
+                            <button onclick="filterMentors()" class="btn-primary">Filter</button>
+                        </div>
+                        <div id="mentors-list" class="mentors-grid"></div>
+                    </div>
+                    
+                    <!-- Messages Section -->
+                    <div id="messages-content" class="content-panel">
+                        <h2>Messages</h2>
+                        <div class="chat-container">
+                            <div class="chat-sidebar">
+                                <h3>Conversations</h3>
+                                <div id="conversations-list"></div>
+                            </div>
+                            <div class="chat-main">
+                                <div id="chat-header"></div>
+                                <div id="chat-messages" class="chat-messages"></div>
+                                <div class="chat-input">
+                                    <input type="text" id="message-input" placeholder="Type your message...">
+                                    <button onclick="sendMessage()" class="btn-primary">Send</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Chatbot Section -->
+                    <div id="chatbot-content" class="content-panel">
+                        <h2>AI Career Assistant</h2>
+                        <div class="chatbot-container">
+                            <div id="chatbot-messages" class="chat-messages">
+                                <div class="message bot-message">
+                                    <div class="message-content">
+                                        Hi! I'm your AI career assistant. I can help you with:
+                                        <ul>
+                                            <li>Career guidance and learning paths</li>
+                                            <li>Technology recommendations</li>
+                                            <li>Interview preparation tips</li>
+                                            <li>Project ideas and next steps</li>
+                                        </ul>
+                                        What would you like to know?
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="chat-input">
+                                <input type="text" id="chatbot-input" placeholder="Ask me anything about your tech career...">
+                                <button onclick="sendChatbotMessage()" class="btn-primary">Send</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+// Global variables
+let currentUser = null
+let socket = null
+let currentChatUser = null
+let mentors = []
+
+// Initialize app
+document.addEventListener("DOMContentLoaded", () => {
+  initializeEventListeners()
+  checkAuthStatus()
+})
+
+function initializeEventListeners() {
+  // Auth forms
+  document.getElementById("login-form").addEventListener("submit", handleLogin)
+  document.getElementById("register-form").addEventListener("submit", handleRegister)
+
+  // Chat input
+  document.getElementById("message-input").addEventListener("keypress", (e) => {
+    if (e.key === "Enter") {
+      sendMessage()
+    }
+  })
+
+  // Chatbot input
+  document.getElementById("chatbot-input").addEventListener("keypress", (e) => {
+    if (e.key === "Enter") {
+      sendChatbotMessage()
+    }
+  })
+}
+
+function logout() {
+  // Clear all stored authentication data
+  localStorage.removeItem("token")
+  localStorage.removeItem("user")
+
+  // Reset current user state
+  currentUser = null
+  currentChatUser = null
+  mentors = []
+
+  // Disconnect socket if connected
+  if (socket) {
+    socket.disconnect()
+    socket = null
+  }
+
+  // Clear all UI content
+  clearUIContent()
+
+  // Show auth section and hide dashboard
+  showAuth()
+
+  // Reset forms
+  resetForms()
+
+  console.log("User logged out successfully")
+}
+
+function clearUIContent() {
+  // Clear mentors list
+  const mentorsList = document.getElementById("mentors-list")
+  if (mentorsList) mentorsList.innerHTML = ""
+
+  // Clear conversations
+  const conversationsList = document.getElementById("conversations-list")
+  if (conversationsList) conversationsList.innerHTML = ""
+
+  // Clear chat messages
+  const chatMessages = document.getElementById("chat-messages")
+  if (chatMessages) chatMessages.innerHTML = ""
+
+  // Clear chatbot messages (keep initial message)
+  const chatbotMessages = document.getElementById("chatbot-messages")
+  if (chatbotMessages) {
+    chatbotMessages.innerHTML = `
+      <div class="message bot-message">
+        <div class="message-content">
+          Hi! I'm your AI career assistant. I can help you with:
+          <ul>
+            <li>Career guidance and learning paths</li>
+            <li>Technology recommendations</li>
+            <li>Interview preparation tips</li>
+            <li>Project ideas and next steps</li>
+          </ul>
+          What would you like to know?
+        </div>
+      </div>
+    `
+  }
+
+  // Clear chat header
+  const chatHeader = document.getElementById("chat-header")
+  if (chatHeader) chatHeader.textContent = ""
+
+  // Clear input fields
+  const messageInput = document.getElementById("message-input")
+  if (messageInput) messageInput.value = ""
+
+  const chatbotInput = document.getElementById("chatbot-input")
+  if (chatbotInput) chatbotInput.value = ""
+
+  const skillsFilter = document.getElementById("skills-filter")
+  if (skillsFilter) skillsFilter.value = ""
+}
+
+function resetForms() {
+  // Reset login form
+  const loginForm = document.getElementById("login-form")
+  if (loginForm) loginForm.reset()
+
+  // Reset register form
+  const registerForm = document.getElementById("register-form")
+  if (registerForm) registerForm.reset()
+
+  // Reset to login tab
+  showLogin()
+}
+
+function checkAuthStatus() {
+  const token = localStorage.getItem("token")
+  const user = localStorage.getItem("user")
+
+  // Only auto-login if both token and user exist and are valid
+  if (token && user) {
+    try {
+      const parsedUser = JSON.parse(user)
+      if (parsedUser && parsedUser.id && parsedUser.username) {
+        currentUser = parsedUser
+        showDashboard()
+        initializeSocket()
+        loadMentors()
+        return
+      }
+    } catch (error) {
+      console.error("Invalid user data in localStorage:", error)
+      // Clear invalid data
+      localStorage.removeItem("token")
+      localStorage.removeItem("user")
+    }
+  }
+
+  // If no valid auth data, show auth section
+  showAuth()
+}
+
+// Auth functions
+function showLogin() {
+  // Remove active class from all tabs and forms
+  document.querySelectorAll(".tab-btn").forEach((btn) => btn.classList.remove("active"))
+  document.querySelectorAll(".auth-form").forEach((form) => form.classList.remove("active"))
+
+  // Add active class to login tab and form
+  document.querySelectorAll(".tab-btn")[0].classList.add("active")
+  document.getElementById("login-form").classList.add("active")
+}
+
+function showRegister() {
+  // Remove active class from all tabs and forms
+  document.querySelectorAll(".tab-btn").forEach((btn) => btn.classList.remove("active"))
+  document.querySelectorAll(".auth-form").forEach((form) => form.classList.remove("active"))
+
+  // Add active class to register tab and form
+  document.querySelectorAll(".tab-btn")[1].classList.add("active")
+  document.getElementById("register-form").classList.add("active")
+}
+
+async function handleLogin(e) {
+  e.preventDefault()
+
+  const email = document.getElementById("login-email").value
+  const password = document.getElementById("login-password").value
+
+  try {
+    const response = await fetch("/api/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    })
+
+    const data = await response.json()
+
+    if (response.ok) {
+      localStorage.setItem("token", data.token)
+      localStorage.setItem("user", JSON.stringify(data.user))
+      currentUser = data.user
+      showDashboard()
+      initializeSocket()
+      loadMentors()
+    } else {
+      alert(data.error)
+    }
+  } catch (error) {
+    alert("Login failed. Please try again.")
+  }
+}
+
+async function handleRegister(e) {
+  e.preventDefault()
+
+  const username = document.getElementById("register-username").value
+  const email = document.getElementById("register-email").value
+  const password = document.getElementById("register-password").value
+  const experienceLevel = document.getElementById("experience-level").value
+
+  const techSkills = Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map((cb) => cb.value)
+
+  try {
+    const response = await fetch("/api/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username,
+        email,
+        password,
+        techSkills,
+        experienceLevel,
+      }),
+    })
+
+    const data = await response.json()
+
+    if (response.ok) {
+      alert("Registration successful! Please login.")
+      showLogin()
+    } else {
+      alert(data.error)
+    }
+  } catch (error) {
+    alert("Registration failed. Please try again.")
+  }
+}
+
+// Navigation functions
+function showAuth() {
+  document.getElementById("auth-section").classList.add("active")
+  document.getElementById("dashboard-section").classList.remove("active")
+
+  // Reset navigation buttons in dashboard
+  document.querySelectorAll(".nav-btn").forEach((btn) => btn.classList.remove("active"))
+  document.querySelectorAll(".content-panel").forEach((panel) => panel.classList.remove("active"))
+
+  // Set default active states
+  if (document.querySelectorAll(".nav-btn").length > 0) {
+    document.querySelectorAll(".nav-btn")[0].classList.add("active")
+  }
+  if (document.getElementById("mentors-content")) {
+    document.getElementById("mentors-content").classList.add("active")
+  }
+}
+
+function showDashboard() {
+  document.getElementById("auth-section").classList.remove("active")
+  document.getElementById("dashboard-section").classList.add("active")
+  document.getElementById("user-welcome").textContent = `Welcome, ${currentUser.username}!`
+}
+
+function showMentors() {
+  setActiveNavButton(event.target)
+  setActiveContentPanel("mentors-content")
+  loadMentors()
+}
+
+function showMessages() {
+  setActiveNavButton(event.target)
+  setActiveContentPanel("messages-content")
+  loadConversations()
+}
+
+function showChatbot() {
+  setActiveNavButton(event.target)
+  setActiveContentPanel("chatbot-content")
+}
+
+function setActiveNavButton(button) {
+  document.querySelector(".nav-btn.active").classList.remove("active")
+  button.classList.add("active")
+}
+
+function setActiveContentPanel(panelId) {
+  document.querySelector(".content-panel.active").classList.remove("active")
+  document.getElementById(panelId).classList.add("active")
+}
+
+// Socket functions
+function initializeSocket() {
+  socket = io()
+
+  socket.emit("join-room", currentUser.id)
+
+  socket.on("receive-message", (data) => {
+    displayMessage(data, false)
+  })
+}
+
+// Add this function to validate the session
+async function validateSession() {
+  const token = localStorage.getItem("token")
+  if (!token) {
+    logout()
+    return false
+  }
+
+  try {
+    const response = await fetch("/api/validate-session", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+
+    if (!response.ok) {
+      logout()
+      return false
+    }
+
+    return true
+  } catch (error) {
+    console.error("Session validation failed:", error)
+    logout()
+    return false
+  }
+}
+
+// Update API calls to handle authentication errors
+async function makeAuthenticatedRequest(url, options = {}) {
+  const token = localStorage.getItem("token")
+
+  if (!token) {
+    logout()
+    throw new Error("No authentication token")
+  }
+
+  const response = await fetch(url, {
+    ...options,
+    headers: {
+      ...options.headers,
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  })
+
+  if (response.status === 401 || response.status === 403) {
+    logout()
+    throw new Error("Authentication failed")
+  }
+
+  return response
+}
+
+// Mentors functions
+async function loadMentors() {
+  try {
+    const response = await makeAuthenticatedRequest("/api/mentors")
+    mentors = await response.json()
+    displayMentors(mentors)
+  } catch (error) {
+    console.error("Failed to load mentors:", error)
+    if (error.message === "Authentication failed" || error.message === "No authentication token") {
+      // User will be logged out by makeAuthenticatedRequest
+      return
+    }
+  }
+}
+
+function displayMentors(mentorsToShow) {
+  const mentorsList = document.getElementById("mentors-list")
+  mentorsList.innerHTML = ""
+
+  mentorsToShow.forEach((mentor) => {
+    const skills = JSON.parse(mentor.tech_skills || "[]")
+    const mentorCard = document.createElement("div")
+    mentorCard.className = "mentor-card"
+    mentorCard.innerHTML = `
+            <div class="mentor-header">
+                <div class="mentor-avatar">${mentor.username.charAt(0).toUpperCase()}</div>
+                <div class="mentor-info">
+                    <h3>${mentor.username}</h3>
+                    <div class="mentor-level">${mentor.experience_level}</div>
+                </div>
+            </div>
+            <div class="mentor-bio">${mentor.bio}</div>
+            <div class="mentor-skills">
+                ${skills.map((skill) => `<span class="skill-tag">${skill}</span>`).join("")}
+            </div>
+            <button class="connect-btn" onclick="connectWithMentor(${mentor.id}, '${mentor.username}')">
+                Connect & Chat
+            </button>
+        `
+    mentorsList.appendChild(mentorCard)
+  })
+}
+
+function filterMentors() {
+  const skillsFilter = document.getElementById("skills-filter").value.toLowerCase()
+
+  if (!skillsFilter) {
+    displayMentors(mentors)
+    return
+  }
+
+  const filteredMentors = mentors.filter((mentor) => {
+    const skills = JSON.parse(mentor.tech_skills || "[]")
+    return skills.some((skill) => skill.toLowerCase().includes(skillsFilter))
+  })
+
+  displayMentors(filteredMentors)
+}
+
+async function connectWithMentor(mentorId, mentorName) {
+  try {
+    const token = localStorage.getItem("token")
+    await fetch("/api/connect-mentor", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ mentorId }),
+    })
+
+    // Switch to messages and start chat
+    currentChatUser = { id: mentorId, username: mentorName }
+    showMessages()
+    startChat(mentorId, mentorName)
+  } catch (error) {
+    alert("Failed to connect with mentor")
+  }
+}
+
+// Chat functions
+function loadConversations() {
+  const conversationsList = document.getElementById("conversations-list")
+  conversationsList.innerHTML = ""
+
+  // Add mentors as conversation options
+  mentors.forEach((mentor) => {
+    const conversationItem = document.createElement("div")
+    conversationItem.className = "conversation-item"
+    conversationItem.innerHTML = `
+            <div><strong>${mentor.username}</strong></div>
+            <div style="font-size: 12px; color: #666;">${mentor.experience_level}</div>
+        `
+    conversationItem.onclick = () => startChat(mentor.id, mentor.username)
+    conversationsList.appendChild(conversationItem)
+  })
+}
+
+function startChat(userId, username) {
+  currentChatUser = { id: userId, username }
+
+  // Update active conversation
+  document.querySelectorAll(".conversation-item").forEach((item) => {
+    item.classList.remove("active")
+  })
+  event.target.closest(".conversation-item").classList.add("active")
+
+  // Update chat header
+  document.getElementById("chat-header").textContent = `Chat with ${username}`
+
+  // Load messages
+  loadMessages(userId)
+}
+
+async function loadMessages(userId) {
+  try {
+    const token = localStorage.getItem("token")
+    const response = await fetch(`/api/messages/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+
+    const messages = await response.json()
+    const chatMessages = document.getElementById("chat-messages")
+    chatMessages.innerHTML = ""
+
+    messages.forEach((message) => {
+      displayMessage(
+        {
+          senderId: message.sender_id,
+          message: message.message,
+          timestamp: message.timestamp,
+          isBot: message.is_bot_message,
+        },
+        true,
+      )
+    })
+
+    chatMessages.scrollTop = chatMessages.scrollHeight
+  } catch (error) {
+    console.error("Failed to load messages:", error)
+  }
+}
+
+function sendMessage() {
+  const messageInput = document.getElementById("message-input")
+  const message = messageInput.value.trim()
+
+  if (!message || !currentChatUser) return
+
+  // Display user message immediately
+  displayMessage(
+    {
+      senderId: currentUser.id,
+      message,
+      timestamp: new Date(),
+    },
+    true,
+  )
+
+  // Send via socket
+  socket.emit("send-message", {
+    senderId: currentUser.id,
+    receiverId: currentChatUser.id,
+    message,
+  })
+
+  messageInput.value = ""
+}
+
+function displayMessage(data, isHistorical = false) {
+  const chatMessages = document.getElementById("chat-messages")
+  const messageDiv = document.createElement("div")
+
+  const isUserMessage = data.senderId === currentUser.id
+  messageDiv.className = `message ${isUserMessage ? "user-message" : data.isBot ? "bot-message" : "other-message"}`
+
+  const messageContent = document.createElement("div")
+  messageContent.className = "message-content"
+  messageContent.textContent = data.message
+
+  if (data.isBot) {
+    messageContent.innerHTML = `<strong>AI Assistant:</strong><br>${data.message}`
+  }
+
+  messageDiv.appendChild(messageContent)
+  chatMessages.appendChild(messageDiv)
+
+  if (!isHistorical) {
+    chatMessages.scrollTop = chatMessages.scrollHeight
+  }
+}
+
+// Chatbot functions
+function sendChatbotMessage() {
+  const chatbotInput = document.getElementById("chatbot-input")
+  const message = chatbotInput.value.trim()
+
+  if (!message) return
+
+  // Display user message
+  displayChatbotMessage(message, true)
+
+  // Simulate AI response
+  setTimeout(() => {
+    const response = getChatbotResponse(message)
+    displayChatbotMessage(response, false)
+  }, 1000)
+
+  chatbotInput.value = ""
+}
+
+function displayChatbotMessage(message, isUser) {
+  const chatbotMessages = document.getElementById("chatbot-messages")
+  const messageDiv = document.createElement("div")
+  messageDiv.className = `message ${isUser ? "user-message" : "bot-message"}`
+
+  const messageContent = document.createElement("div")
+  messageContent.className = "message-content"
+
+  if (isUser) {
+    messageContent.textContent = message
+  } else {
+    messageContent.innerHTML = `<strong>AI Assistant:</strong><br>${message}`
+  }
+
+  messageDiv.appendChild(messageContent)
+  chatbotMessages.appendChild(messageDiv)
+  chatbotMessages.scrollTop = chatbotMessages.scrollHeight
+}
+
+function getChatbotResponse(message) {
+  const lowerMessage = message.toLowerCase()
+
+  const responses = {
+    hello: "Hi there! I'm here to help you with your tech career journey. What would you like to know?",
+    career:
+      "Great question! What specific area of tech are you interested in? Frontend, backend, mobile, data science, or something else?",
+    javascript:
+      "JavaScript is an excellent choice! I recommend starting with the basics: variables, functions, and DOM manipulation. Then move on to frameworks like React or Vue.js. Would you like a detailed learning path?",
+    python:
+      "Python is perfect for beginners! Start with basic syntax, then explore web development with Django/Flask or data science with pandas and numpy. What interests you more - web development or data science?",
+    react:
+      "React is a powerful frontend library! Begin with components, props, and state. Practice building small projects before moving to advanced concepts like hooks and context. Want some project ideas?",
+    learning:
+      "Here's a great learning path: 1) Choose a language 2) Build projects 3) Join communities 4) Contribute to open source 5) Never stop practicing! What stage are you at?",
+    job: "To land your first tech job: 1) Build a strong portfolio 2) Practice coding interviews 3) Network with professionals 4) Apply consistently 5) Don't give up! Need help with any specific area?",
+    portfolio:
+      "A great portfolio should include: 1) 3-5 quality projects 2) Clean, readable code 3) Live demos 4) Clear documentation 5) Your contact info. What type of projects are you working on?",
+    interview:
+      "For coding interviews: 1) Practice algorithms daily 2) Use platforms like LeetCode 3) Mock interviews 4) Study system design 5) Prepare behavioral questions. Which area needs the most work?",
+  }
+
+  for (const [key, response] of Object.entries(responses)) {
+    if (lowerMessage.includes(key)) {
+      return response
+    }
+  }
+
+  return "I understand you're looking for guidance. Could you be more specific about what you'd like to know? I can help with career advice, learning paths, specific technologies, job search tips, or interview preparation."
+}
+
+    </script>
+</body>
+</html>

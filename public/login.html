@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>TEKMAC</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to right, #3498db, #8e44ad);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 2rem;
+      color: #fff;
+      flex-direction: column;
+    }
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      justify-content: center;
+    }
+    .payment-card {
+      background: #ffffff;
+      color: #333;
+      padding: 2rem;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 20px 30px rgba(0,0,0,0.2);
+    }
+    h2 {
+      text-align: center;
+      color: #0083b0;
+    }
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #0083b0;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #005f78;
+    }
+    .response-message {
+      margin-top: 1rem;
+      text-align: center;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+    .success {
+      color: green;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>TEKMAC SIGNUP</h1>
+
+  <div class="container">
+    <div class="payment-card">
+      <h2>Sign Up to TEKMAC</h2>
+      <form id="collectForm">
+        <input type="text" id="username" placeholder="Enter name" required>
+        <input type="email" id="email" placeholder="Enter email" required>
+        <input type="password" id="password" placeholder="Enter password" required>
+        <input type="tel" id="phoneNumber" placeholder="Enter Number" required>
+        <button type="submit">Sign Up</button>
+        <div id="collectResponse" class="response-message"></div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('collectForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const username = document.getElementById('username').value;
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const phoneNumber = document.getElementById('phoneNumber').value;
+
+      const res = await fetch('/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, email, password, phoneNumber })
+      });
+
+      const data = await res.json();
+      if (data.token && data.user) {
+  localStorage.setItem('userId', data.user.id);         // Set userId here
+  localStorage.setItem('username', data.user.username); // Set username here
+  localStorage.setItem('token', data.token);            // Set token if needed
+  window.location.href = 'dashboard.html';
+} else {
+  console.log('No token or user data received:', data);
+  document.getElementById('collectResponse').textContent = 'Error: ' + (data.error || 'Unknown error');
+}
+      const msg = document.getElementById('collectResponse');
+      msg.textContent = data.success ? '✅ Registration successful' : data.error;
+      msg.className = 'response-message ' + (data.success ? 'success' : 'error');
+
+      if (data.success) {
+        window.location.href = data.redirect;
+      }
+    });
+  </script>
+
+</body>
+</html>
