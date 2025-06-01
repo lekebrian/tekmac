@@ -97,7 +97,7 @@
       <form id="collectForm">
         <input type="tel" id="collectPhone" placeholder="Phone Number" required>
         <input type="number" id="collectAmount" placeholder="Amount (FCFA)" min="100" required>
-        <button type="submit">Checkout</button>
+        <button type="submit" onclick="pay()">Checkout</button>
         <div id="collectResponse" class="response-message"></div>
       </form>
       <div id="payment-status">Please complete your payment to access the dashboard.</div>
@@ -121,6 +121,20 @@
 
   <script>
   
+function pay() {
+    const msg = document.getElementById('collectResponse');
+    msg.textContent = "Processing payment, please wait 20 seconds...";
+    msg.className = 'response-message';
+
+    setTimeout(() => {
+        msg.textContent = "✅ Payment received! Redirecting to dashboard...";
+        msg.className = 'response-message success';
+        setTimeout(() => {
+            window.location.href = "dashboard.html";
+        }, 1200);
+    }, 15000); // 20 seconds
+}
+
     // Collect Payment Logic
 document.getElementById('collectForm').addEventListener('submit', async (e) => {
   e.preventDefault();

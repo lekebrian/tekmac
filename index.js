@@ -216,7 +216,7 @@ app.post('/api/nkwa-collect', async (req, res) => {
 async function insertSampleMentors() {
   const mentors = [
     {
-      username: "sarah_js",
+      username: "Leke_js",
       email: "sarah@example.com",
       password: await bcrypt.hash("password123", 10),
       tech_skills: JSON.stringify(["JavaScript", "React", "Node.js"]),
@@ -225,7 +225,7 @@ async function insertSampleMentors() {
       experience_level: "Senior",
     },
     {
-      username: "mike_python",
+      username: "Fongong_python",
       email: "mike@example.com",
       password: await bcrypt.hash("password123", 10),
       tech_skills: JSON.stringify(["Python", "Django", "Machine Learning"]),
@@ -234,7 +234,7 @@ async function insertSampleMentors() {
       experience_level: "Senior",
     },
     {
-      username: "alex_mobile",
+      username: "Lena_mobile",
       email: "alex@example.com",
       password: await bcrypt.hash("password123", 10),
       tech_skills: JSON.stringify(["React Native", "Flutter", "iOS", "Android"]),

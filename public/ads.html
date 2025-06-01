@@ -7,6 +7,139 @@
      <link rel="favicon" href="logoo.ico" type="image/x-icon">
      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Ads Navigation Buttons */
+.ads-nav-buttons {
+    display: flex;
+    gap: 1.2rem;
+    justify-content: flex-end;
+    margin: 2rem 2rem 1rem 2rem;
+}
+.ads-nav-buttons .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5em;
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 0.6rem 1.4rem;
+    border-radius: 18px;
+    text-decoration: none;
+    transition: background 0.2s, color 0.2s, transform 0.2s;
+    box-shadow: 0 4px 15px rgba(247, 183, 49, 0.13);
+}
+.ads-nav-buttons .btn-primary {
+    background: linear-gradient(135deg, #f7b731 0%, #764ba2 100%);
+    color: #fff !important;
+}
+.ads-nav-buttons .btn-secondary {
+    background: #333;
+    color: #fff !important;
+}
+.ads-nav-buttons .btn:hover {
+    transform: translateY(-2px) scale(1.04);
+    opacity: 0.92;
+}
+
+/* Ads Section */
+.ads-section {
+    background: linear-gradient(135deg, #f7b731 0%, #764ba2 100%);
+    padding: 3rem 0 2rem 0;
+    border-radius: 0 0 40px 40px;
+    box-shadow: 0 8px 32px rgba(118,75,162,0.13), 0 2px 8px #f7b73133;
+    margin-bottom: 2rem;
+}
+.ads-section h2 {
+    color: #fff;
+    text-align: center;
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 2.5rem;
+    letter-spacing: 1px;
+}
+
+/* Ads List */
+#ads-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    justify-content: center;
+}
+
+/* Ad Card */
+.ad-card {
+    background: #fff;
+    border-radius: 22px;
+    box-shadow: 0 8px 32px rgba(118,75,162,0.13), 0 2px 8px #f7b73133;
+    width: 290px;
+    padding: 1.5rem 1.2rem 1.2rem 1.2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+    animation: fadeInUp 0.8s cubic-bezier(.23,1.01,.32,1) both;
+    position: relative;
+    overflow: hidden;
+}
+.ad-card:hover {
+    transform: translateY(-8px) scale(1.03);
+    box-shadow: 0 16px 40px rgba(118,75,162,0.18), 0 4px 16px #f7b73144;
+}
+.ad-card img {
+    width: 100%;
+    height: 170px;
+    object-fit: cover;
+    border-radius: 16px;
+    margin-bottom: 1rem;
+    background: #f7b73122;
+}
+.ad-card h4 {
+    font-size: 1.25rem;
+    color: #764ba2;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+.ad-card p {
+    color: #333;
+    font-size: 1.05rem;
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+.ad-card span {
+    display: inline-block;
+    margin-top: 0.7rem;
+    background: linear-gradient(90deg, #f7b731 0%, #764ba2 100%);
+    color: #fff;
+    font-weight: 600;
+    padding: 0.35em 1.1em;
+    border-radius: 12px;
+    font-size: 0.98rem;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 8px #f7b73133;
+}
+
+/* Animation */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(40px);}
+    to { opacity: 1; transform: translateY(0);}
+}
+
+/* Responsive */
+@media (max-width: 700px) {
+    .ads-section {
+        padding: 2rem 0 1rem 0;
+        border-radius: 0 0 20px 20px;
+    }
+    .ad-card {
+        width: 98vw;
+        max-width: 340px;
+        padding: 1.1rem 0.7rem 1rem 0.7rem;
+    }
+    .ad-card img {
+        height: 130px;
+    }
+}
+    </style>
 </head>
 <body>
 

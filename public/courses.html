@@ -355,6 +355,34 @@
                 margin-bottom: 0;
             }
         }
+        .meet-greet-link {
+    margin: 35px 0 0 0;
+    text-align: center;
+}
+.meet-greet-link a {
+    display: inline-block;
+    background: linear-gradient(90deg, #6366f1 0%, #f7b731 100%);
+    color: #fff;
+    font-weight: 600;
+    font-size: 1.15em;
+    padding: 14px 32px;
+    border-radius: 30px;
+    box-shadow: 0 4px 18px rgba(99,102,241,0.13), 0 2px 8px #f7b73133;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.2s;
+    letter-spacing: 0.5px;
+}
+.meet-greet-link a i {
+    margin-right: 10px;
+    font-size: 1.2em;
+    vertical-align: middle;
+}
+.meet-greet-link a:hover {
+    background: linear-gradient(90deg, #f7b731 0%, #6366f1 100%);
+    color: #fff;
+    transform: translateY(-3px) scale(1.04);
+    text-decoration: none;
+}
     </style>
 </head>
 <body>
@@ -463,6 +491,13 @@
 
         </div>
         </div>
+
+        <div class="meet-greet-link">
+    <a href="https://preview--meet-n-greet-now.lovable.app/" target="_blank">
+        <i class="fas fa-users"></i>
+        Meet & Greet Now
+    </a>
+</div>
 
     <script>
         // Basic Tab switching functionality (if you plan to use other tabs in this page)
