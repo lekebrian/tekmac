@@ -11,6 +11,7 @@ import http from 'http';
 import { Server as SocketIOServer } from 'socket.io';
 import jwt from 'jsonwebtoken';
 import cors from 'cors';
+import multer from 'multer'; // Moved multer import up for clarity
 
 dotenv.config();
 
@@ -21,7 +22,7 @@ const app = express();
 const server = http.createServer(app);
 const io = new SocketIOServer(server, {
   cors: {
-    origin: "*",
+    origin: "*", // Consider restricting this in production
     methods: ["GET", "POST"],
   },
 });
@@ -30,12 +31,16 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// --- MODIFICATION START ---
+// Database configuration - now pulls from environment variables
 const dbConfig = {
-  host: 'localhost',
-  user: 'root',
-  password: '',
-  database: 'tekmac',
+  host: process.env.DB_HOST || 'localhost', // Docker service name 'db'
+  user: process.env.DB_USER || 'root',      // User defined in docker-compose.yaml
+  password: process.env.DB_PASSWORD || '',  // Password defined in docker-compose.yaml
+  database: process.env.DB_NAME || 'tekmac',// Database name defined in docker-compose.yaml
+  port: process.env.DB_PORT || 3306         // MySQL default port
 };
+// --- MODIFICATION END ---
 
 let db;
 (async () => {
@@ -44,7 +49,9 @@ let db;
     console.log('Connected to the database');
     await createTables();
   } catch (err) {
-    console.error('Database connection failed:', err);
+    console.error('Database connection failed:', err.message); // Log full error message
+    // Provide more detail for debugging
+    console.error('DB Config:', dbConfig);
     process.exit(1);
   }
 })();
@@ -58,16 +65,18 @@ app.post('/register', async (req, res) => {
 
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
+    // Ensure 'users' table has 'phoneNumber' column if you intend to save it
+    // For now, only username, email, password are inserted as per schema
     await db.execute(
       "INSERT INTO users (username, email, password) VALUES (?, ?, ?)",
       [username, email, hashedPassword]
     );
-    // Optionally, you can save phoneNumber if you add a column for it
     res.json({ success: true, redirect: '/pay.html' });
   } catch (error) {
     res.status(500).json({ success: false, error: 'Registration failed: ' + error.message });
   }
 });
+
 async function createTables() {
   // Users table
   await db.execute(`
@@ -111,27 +120,25 @@ async function createTables() {
     ) ENGINE=InnoDB
   `);
 
-  // Add this to your createTables() function after other tables
-await db.execute(`
-  CREATE TABLE IF NOT EXISTS ads (
-    id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    user_id INT UNSIGNED,
-    image_url VARCHAR(255),
-    business_name VARCHAR(100) NOT NULL,
-    description TEXT NOT NULL,
-    location VARCHAR(100) NOT NULL,
-    schedule ENUM('daily', 'weekly', 'monthly') NOT NULL,
-    amount INT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
-  ) ENGINE=InnoDB
-`);
+  // Ads table
+  await db.execute(`
+    CREATE TABLE IF NOT EXISTS ads (
+      id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+      user_id INT UNSIGNED,
+      image_url VARCHAR(255),
+      business_name VARCHAR(100) NOT NULL,
+      description TEXT NOT NULL,
+      location VARCHAR(100) NOT NULL,
+      schedule ENUM('daily', 'weekly', 'monthly') NOT NULL,
+      amount INT NOT NULL,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
+    ) ENGINE=InnoDB
+  `);
 
   // Insert sample mentors
   await insertSampleMentors();
 }
-
-
 
 app.post('/login', async (req, res) => {
   const { email, password } = req.body;
@@ -140,28 +147,23 @@ app.post('/login', async (req, res) => {
   }
 
   try {
-    // Check if user exists
     const [users] = await db.execute('SELECT * FROM users WHERE email = ?', [email]);
     if (users.length === 0) {
       return res.status(401).json({ success: false, error: 'User not found' });
     }
 
     const user = users[0];
-
-    // Compare password
     const match = await bcrypt.compare(password, user.password);
     if (!match) {
       return res.status(401).json({ success: false, error: 'Incorrect password' });
     }
 
-    // Generate a token (optional, but recommended)
     const token = jwt.sign(
       { id: user.id, username: user.username, email: user.email },
       process.env.JWT_SECRET || 'your_jwt_secret',
       { expiresIn: '2h' }
     );
 
-    // Respond with user info and token
     res.json({
       success: true,
       user: {
@@ -177,7 +179,6 @@ app.post('/login', async (req, res) => {
 });
 
 // For file uploads
-import multer from 'multer';
 const upload = multer({ dest: path.join(__dirname, 'public', 'ads') });
 
 // Post a new ad (with image upload)
@@ -196,10 +197,16 @@ app.post('/api/ads', upload.single('image'), async (req, res) => {
 });
 
 // Get all ads for display on index.html
-app.get('/api/ads',upload.single('image'), async (req, res) => {
-  const [ads] = await db.execute("SELECT * FROM ads ORDER BY created_at DESC LIMIT 10");
-  res.json(ads);
+// Removed upload.single('image') from GET /api/ads, it's not needed for a GET request
+app.get('/api/ads', async (req, res) => {
+  try {
+    const [ads] = await db.execute("SELECT * FROM ads ORDER BY created_at DESC LIMIT 10");
+    res.json(ads);
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
 });
+
 
 app.post('/api/nkwa-collect', async (req, res) => {
     const { phone, amount } = req.body;
@@ -368,11 +375,11 @@ app.get("/api/messages/:userId", authenticateToken, async (req, res) => {
 
     const [rows] = await db.execute(
       `SELECT m.*, u.username as sender_username 
-       FROM messages m 
-       JOIN users u ON m.sender_id = u.id 
-       WHERE (m.sender_id = ? AND m.receiver_id = ?) 
+        FROM messages m 
+        JOIN users u ON m.sender_id = u.id 
+        WHERE (m.sender_id = ? AND m.receiver_id = ?) 
           OR (m.sender_id = ? AND m.receiver_id = ?) 
-       ORDER BY m.timestamp ASC`,
+        ORDER BY m.timestamp ASC`,
       [currentUserId, userId, userId, currentUserId]
     );
 

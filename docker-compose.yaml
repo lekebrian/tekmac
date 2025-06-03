@@ -1,0 +1,49 @@
+version: '3.8' # Using a modern version
+
+services:
+  app:
+    build: .
+    container_name: tekmac
+    environment:
+      # Application-specific environment variables
+      - PAY_API_KEY_AUTH=BjamU6FkCKJbXd3D9ZLex
+      - NODE_ENV=development
+      - PORT=3006
+      - JWT_SECRET=your_jwt_secret_please_change_this_for_production # Match your app's JWT_SECRET
+
+      # --- MODIFICATION START ---
+      # Database connection environment variables for the 'app' service
+      - DB_HOST=db       # This is the service name of your MySQL container
+      - DB_USER=myuser   # This matches MYSQL_USER in the 'db' service
+      - DB_PASSWORD=mysecretpassword # This matches MYSQL_PASSWORD in the 'db' service
+      - DB_NAME=tekmac   # This matches MYSQL_DATABASE in the 'db' service
+      - DB_PORT=3306     # MySQL default port
+      # --- MODIFICATION END ---
+    ports:
+      - "5003:3006" # Map host port 5003 to container's app port 3006
+    depends_on:
+      - db
+    volumes:
+      - .:/app # Mount your current directory to /app inside the container
+      # Exclude node_modules from being mounted from host to avoid permission issues
+      - /app/node_modules
+
+  db:
+    image: mysql:8.4 # Using the latest LTS version you mentioned
+    container_name: mysql-db
+    environment:
+      # These are the correct environment variables for MySQL Docker image
+      - MYSQL_ROOT_PASSWORD=your_secure_root_password # IMPORTANT: Set a strong root password
+      - MYSQL_USER=myuser                             # User for your application
+      - MYSQL_PASSWORD=mysecretpassword               # Password for your application user
+      - MYSQL_DATABASE=tekmac                         # Database name for your application
+      # Ensure character set and collation are set if needed for specific use cases
+      - MYSQL_CHARSET=utf8mb4
+      - MYSQL_COLLATION=utf8mb4_unicode_ci
+    ports:
+      - "3306:3306" # Expose MySQL's default port 3306 to the host machine on 3306 (optional, but good for local dev/tools)
+    volumes:
+      - mysql-data:/var/lib/mysql # Correct volume mapping for MySQL data persistence
+
+volumes:
+  mysql-data: # Define the named volume
