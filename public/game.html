@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strategic Tic-Tac-Toe</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .game-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .game-info {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: linear-gradient(45deg, #f093fb 0%, #f5576c 100%);
+            border-radius: 10px;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .phase-info {
+            margin-bottom: 10px;
+            font-size: 1rem;
+            color: #666;
+            font-style: italic;
+        }
+
+        .board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin: 20px auto;
+            max-width: 300px;
+            background: #333;
+            padding: 10px;
+            border-radius: 15px;
+        }
+
+        .cell {
+            width: 80px;
+            height: 80px;
+            background: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .cell:hover:not(.occupied) {
+            background: #e8f4fd;
+            transform: scale(1.05);
+        }
+
+        .cell.occupied {
+            cursor: default;
+        }
+
+        .cell.selectable {
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(102, 126, 234, 0.6);
+            animation: pulse 1.5s infinite;
+        }
+
+        .cell.selected {
+            background: #ffeb3b;
+            box-shadow: 0 0 20px rgba(255, 235, 59, 0.8);
+            transform: scale(1.1);
+        }
+
+        .cell.move-target {
+            background: #c8e6c9;
+            cursor: pointer;
+        }
+
+        .cell.move-target:hover {
+            background: #a5d6a7;
+            transform: scale(1.05);
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 15px rgba(102, 126, 234, 0.6); }
+            50% { box-shadow: 0 0 25px rgba(102, 126, 234, 0.9); }
+            100% { box-shadow: 0 0 15px rgba(102, 126, 234, 0.6); }
+        }
+
+        .cell.x {
+            color: #e74c3c;
+        }
+
+        .cell.o {
+            color: #3498db;
+        }
+
+        .controls {
+            margin-top: 20px;
+        }
+
+        .reset-btn {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(238, 90, 36, 0.4);
+        }
+
+        .reset-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(238, 90, 36, 0.6);
+        }
+
+        .winner-message {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            animation: celebration 0.6s ease-in-out;
+        }
+
+        .winner-message.win {
+            background: linear-gradient(45deg, #2ecc71, #27ae60);
+            color: white;
+        }
+
+        .winner-message.draw {
+            background: linear-gradient(45deg, #f39c12, #e67e22);
+            color: white;
+        }
+
+        @keyframes celebration {
+            0% { transform: scale(0.8); opacity: 0; }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .piece-count {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 15px;
+            font-size: 1rem;
+        }
+
+        .piece-count div {
+            padding: 8px 15px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            font-weight: bold;
+        }
+
+        .instructions {
+            margin-top: 15px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            font-size: 0.9rem;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        @media (max-width: 480px) {
+            .game-container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .cell {
+                width: 70px;
+                height: 70px;
+                font-size: 1.8rem;
+            }
+            
+            .board {
+                max-width: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>Strategic Tic-Tac-Toe</h1>
+        
+        <div class="piece-count">
+            <div class="x-count">Player X: <span id="x-pieces">3</span> pieces</div>
+            <div class="o-count">Player O: <span id="o-pieces">3</span> pieces</div>
+        </div>
+        
+        <div class="game-info">
+            <div id="current-player">Player X's Turn</div>
+            <div class="phase-info" id="phase-info">Placement Phase - Click to place your pieces</div>
+        </div>
+        
+        <div class="board" id="board">
+            <button class="cell" data-index="0"></button>
+            <button class="cell" data-index="1"></button>
+            <button class="cell" data-index="2"></button>
+            <button class="cell" data-index="3"></button>
+            <button class="cell" data-index="4"></button>
+            <button class="cell" data-index="5"></button>
+            <button class="cell" data-index="6"></button>
+            <button class="cell" data-index="7"></button>
+            <button class="cell" data-index="8"></button>
+        </div>
+        
+        <div class="controls">
+            <button class="reset-btn" onclick="resetGame()">Reset Game</button>
+        </div>
+        
+        <div class="instructions">
+            <strong>How to Play:</strong><br>
+            • Each player gets exactly 3 pieces<br>
+            • First, place all 3 pieces on the board<br>
+            • Then, move your pieces to new positions<br>
+            • Get 3 in a row to win!
+        </div>
+        
+        <div id="winner-message"></div>
+    </div>
+
+    <script>
+        // Game state variables
+        let currentPlayer = 'X';
+        let gameBoard = ['', '', '', '', '', '', '', '', ''];
+        let gameActive = true;
+        let gamePhase = 'placement'; // 'placement' or 'movement'
+        let piecesPlaced = { X: 0, O: 0 };
+        let selectedPiece = null;
+        let totalTurns = 0;
+
+        // DOM elements
+        const cells = document.querySelectorAll('.cell');
+        const currentPlayerDisplay = document.getElementById('current-player');
+        const phaseInfoDisplay = document.getElementById('phase-info');
+        const winnerMessageDisplay = document.getElementById('winner-message');
+        const xPiecesDisplay = document.getElementById('x-pieces');
+        const oPiecesDisplay = document.getElementById('o-pieces');
+
+        // Winning combinations
+        const winningCombinations = [
+            [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
+            [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
+            [0, 4, 8], [2, 4, 6] // Diagonals
+        ];
+
+        // Initialize the game
+        function initGame() {
+            cells.forEach((cell, index) => {
+                cell.addEventListener('click', () => handleCellClick(index));
+            });
+            updateDisplay();
+        }
+
+        // Handle cell click based on current game phase
+        function handleCellClick(index) {
+            if (!gameActive) return;
+
+            if (gamePhase === 'placement') {
+                handlePlacementClick(index);
+            } else {
+                handleMovementClick(index);
+            }
+        }
+
+        // Handle clicks during placement phase
+        function handlePlacementClick(index) {
+            // Can only place on empty cells
+            if (gameBoard[index] !== '') return;
+
+            // Place the piece
+            gameBoard[index] = currentPlayer;
+            piecesPlaced[currentPlayer]++;
+            totalTurns++;
+
+            // Update the cell display
+            updateCellDisplay(index);
+
+            // Check for win after placement
+            if (checkWinner()) {
+                endGame(`Player ${currentPlayer} Wins!`, 'win');
+                return;
+            }
+
+            // Check if placement phase is complete
+            if (piecesPlaced.X === 3 && piecesPlaced.O === 3) {
+                gamePhase = 'movement';
+                clearCellStyles();
+                updateDisplay();
+            } else {
+                // Switch player
+                switchPlayer();
+            }
+        }
+
+        // Handle clicks during movement phase
+        function handleMovementClick(index) {
+            if (selectedPiece === null) {
+                // Selecting a piece to move
+                if (gameBoard[index] === currentPlayer) {
+                    selectedPiece = index;
+                    highlightMovablePositions();
+                    updateDisplay();
+                }
+            } else {
+                // Moving the selected piece
+                if (index === selectedPiece) {
+                    // Deselect the piece
+                    selectedPiece = null;
+                    clearCellStyles();
+                    updateDisplay();
+                } else if (gameBoard[index] === '') {
+                    // Move to empty position
+                    gameBoard[selectedPiece] = '';
+                    gameBoard[index] = currentPlayer;
+                    selectedPiece = null;
+                    totalTurns++;
+
+                    // Update display
+                    updateAllCells();
+                    clearCellStyles();
+
+                    // Check for win after movement
+                    if (checkWinner()) {
+                        endGame(`Player ${currentPlayer} Wins!`, 'win');
+                        return;
+                    }
+
+                    // Check for draw (if no moves possible)
+                    if (checkDraw()) {
+                        endGame("It's a Draw!", 'draw');
+                        return;
+                    }
+
+                    // Switch player
+                    switchPlayer();
+                }
+            }
+        }
+
+        // Update individual cell display
+        function updateCellDisplay(index) {
+            const cell = cells[index];
+            const value = gameBoard[index];
+            
+            cell.textContent = value;
+            cell.className = 'cell';
+            
+            if (value !== '') {
+                cell.classList.add('occupied', value.toLowerCase());
+            }
+        }
+
+        // Update all cells
+        function updateAllCells() {
+            cells.forEach((cell, index) => {
+                updateCellDisplay(index);
+            });
+        }
+
+        // Highlight positions where the selected piece can move
+        function highlightMovablePositions() {
+            clearCellStyles();
+            
+            // Highlight selected piece
+            if (selectedPiece !== null) {
+                cells[selectedPiece].classList.add('selected');
+            }
+
+            // Highlight empty cells as move targets
+            cells.forEach((cell, index) => {
+                if (gameBoard[index] === '') {
+                    cell.classList.add('move-target');
+                }
+            });
+
+            // Highlight selectable pieces for current player
+            cells.forEach((cell, index) => {
+                if (gameBoard[index] === currentPlayer && selectedPiece === null) {
+                    cell.classList.add('selectable');
+                }
+            });
+        }
+
+        // Clear all cell styling
+        function clearCellStyles() {
+            cells.forEach(cell => {
+                cell.classList.remove('selected', 'move-target', 'selectable');
+            });
+        }
+
+        // Switch to the other player
+        function switchPlayer() {
+            currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+            updateDisplay();
+        }
+
+        // Update the game display
+        function updateDisplay() {
+            currentPlayerDisplay.textContent = `Player ${currentPlayer}'s Turn`;
+            
+            if (gamePhase === 'placement') {
+                const remaining = 3 - piecesPlaced[currentPlayer];
+                phaseInfoDisplay.textContent = `Placement Phase - Place ${remaining} more piece${remaining !== 1 ? 's' : ''}`;
+            } else {
+                if (selectedPiece !== null) {
+                    phaseInfoDisplay.textContent = 'Movement Phase - Click an empty cell to move your piece';
+                } else {
+                    phaseInfoDisplay.textContent = 'Movement Phase - Click one of your pieces to select it';
+                }
+                highlightMovablePositions();
+            }
+
+            // Update piece counts
+            xPiecesDisplay.textContent = '3';
+            oPiecesDisplay.textContent = '3';
+        }
+
+        // Check for a winner
+        function checkWinner() {
+            return winningCombinations.some(combination => {
+                const [a, b, c] = combination;
+                return gameBoard[a] !== '' && 
+                       gameBoard[a] === gameBoard[b] && 
+                       gameBoard[b] === gameBoard[c];
+            });
+        }
+
+        // Check for draw (no possible moves)
+        function checkDraw() {
+            // In movement phase, check if current player has any valid moves
+            if (gamePhase === 'movement') {
+                const playerPieces = [];
+                const emptySpaces = [];
+                
+                gameBoard.forEach((cell, index) => {
+                    if (cell === currentPlayer) {
+                        playerPieces.push(index);
+                    } else if (cell === '') {
+                        emptySpaces.push(index);
+                    }
+                });
+                
+                // If there are empty spaces, moves are possible
+                return emptySpaces.length === 0;
+            }
+        
+            return false;
+        }
+
+        // End the game
+        function endGame(message, type) {
+            gameActive = false;
+            selectedPiece = null;
+            clearCellStyles();
+            
+            winnerMessageDisplay.textContent = message;
+            winnerMessageDisplay.className = `winner-message ${type}`;
+            
+            phaseInfoDisplay.textContent = 'Game Over';
+        }
+
+        // Reset the game
+        function resetGame() {
+            currentPlayer = 'X';
+            gameBoard = ['', '', '', '', '', '', '', '', ''];
+            gameActive = true;
+            gamePhase = 'placement';
+            piecesPlaced = { X: 0, O: 0 };
+            selectedPiece = null;
+            totalTurns = 0;
+            
+            winnerMessageDisplay.textContent = '';
+            winnerMessageDisplay.className = '';
+            
+            updateAllCells();
+            clearCellStyles();
+            updateDisplay();
+        }
+
+        // Start the game when page loads
+        initGame();
+    </script>
+</body>
+</html>
